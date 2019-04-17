@@ -25,6 +25,7 @@ import module.workflow.domain.ProcessFile;
 import module.workflow.domain.ProcessFileSignatureHandler;
 import module.workflow.domain.SigningState;
 import module.workflow.domain.WorkflowProcess;
+import module.workflow.presentationTier.actions.CommentBean;
 
 @RestController
 @RequestMapping("/workflow")
@@ -43,7 +44,7 @@ public class CallbackController {
 
     @SkipCSRF
     @RequestMapping(value = "/{processFile}/sign", method = RequestMethod.POST)
-    public Response addSignedPurchaseOrderDocument(@PathVariable("processFile") ProcessFile processFile,
+    public Response signOrRefuse(@PathVariable("processFile") ProcessFile processFile,
             @QueryParam("nounce") String nounce, @RequestParam(required = false) MultipartFile file,
             @RequestParam("username") String signerUsername, @RequestParam(value = "", required = false) String refuseReason) {
         if (logger.isDebugEnabled()) {
@@ -93,6 +94,10 @@ public class CallbackController {
                     logger.debug("   no content... removing file from process.");
                 }
                 process.removeFiles(processFile);
+                processFile.setRefusedFile();
+                CommentBean commentBean = new CommentBean(process);
+                commentBean.setComment(refuseReason);
+                process.createComment(user, commentBean);
             } else {
                 if (logger.isDebugEnabled()) {
                     logger.debug("   setting signed file.");
