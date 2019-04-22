@@ -303,5 +303,10 @@ public class ProcessFile extends ProcessFile_Base {
         setSigningState(SigningState.SIGNED);
         new FileUploadLog(getProcess(), filename, filename, WorkflowClassUtil.getNameForType(file.getClass()), "");
     }
+    
+    @Atomic
+    public void setRefusedFile() {
+        setSigningState(SigningState.REFUSED);
+    }
 
 }
