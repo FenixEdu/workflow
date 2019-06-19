@@ -301,7 +301,7 @@ public class ProcessFile extends ProcessFile_Base {
             throw new Error(e);
         }
         setSigningState(SigningState.SIGNED);
-        new FileUploadLog(getProcess(), filename, filename, WorkflowClassUtil.getNameForType(file.getClass()), "");
+        new FileUploadLog(getProcess(), filename, filename, WorkflowClassUtil.getNameForType(this.getClass()), "");
     }
     
     @Atomic
