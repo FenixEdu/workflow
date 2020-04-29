@@ -55,4 +55,11 @@ public class WorkflowProcessComment extends WorkflowProcessComment_Base {
         return !getReadersSet().contains(user);
     }
 
+    public void delete() {
+        this.setCommenter(null);
+        this.setProcess(null);
+        this.getReadersSet().clear();
+        this.setWorkflowSystem(null);
+        super.deleteDomainObject();
+    }
 }

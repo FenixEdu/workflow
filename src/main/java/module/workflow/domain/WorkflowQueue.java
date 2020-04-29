@@ -142,5 +142,4 @@ public abstract class WorkflowQueue extends WorkflowQueue_Base {
     }
 
     public abstract Collection<User> getUsers();
-
 }

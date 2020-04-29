@@ -40,6 +40,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import module.workflow.presentationTier.renderers.WorkflowProcessFiles;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.joda.time.DateTime;
@@ -1012,6 +1013,25 @@ public abstract class WorkflowProcess extends WorkflowProcess_Base {
     @Deprecated
     public java.util.Set<module.workflow.domain.ProcessFile> getFiles() {
         return getFilesSet();
+    }
+
+    public void delete() {
+        for (WorkflowLog log : this.getExecutionLogsSet()) {
+            log.delete();
+        }
+        for (WorkflowProcessComment comment : this.getCommentsSet()) {
+            comment.delete();
+        }
+        this.getCurrentQueuesSet().clear();
+        this.getQueueHistorySet().clear();
+        for (ProcessFile file : this.getFilesSet()) {
+            file.delete();
+        }
+        for (User observer : this.getObserversSet()) {
+            this.removeObservers(observer);
+        }
+        this.setWorkflowSystem(null);
+        super.deleteDomainObject();
     }
 
     private static Map<String, SortedSet<String>> HOOKS = new HashMap<>();
